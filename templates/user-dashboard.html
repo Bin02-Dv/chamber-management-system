@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>CCMS - User Dashboard</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/user-dashboard">CCMS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">My Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/settings">Settings</a>
+                </li>
+                {% if user.is_superuser == True %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage-case">My Schedule</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage-case2">My Schedule</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        {% for message in messages %}
+        {% if message.tags == 'error'%}
+        <div class="alert alert-danger">{{message}}</div>
+        {% elif message.tags == 'success'%}
+        <div class="alert alert-success">{{message}}</div>
+        {% endif %}
+        {% endfor %}
+        <div class="row">
+            {% if user.is_superuser != True %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">My Profile</h5>
+                        <p class="card-text">View and edit your profile details.</p>
+                        <a href="/profile" class="btn btn-primary">Go to Profile</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if user.is_superuser == True %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Cases</h5>
+                            <p class="card-text">Manage your assigned legal cases.</p>
+                            <a href="/manage-case" class="btn btn-primary">Go to Cases</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">My Cases</h5>
+                            <p class="card-text">Manage your assigned legal cases.</p>
+                            <a href="/manage-case2" class="btn btn-primary">Go to Cases</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% if user.is_superuser == True %}
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Schedule a case</h5>
+                        <p class="card-text">View and manage your court schedule.</p>
+                        <a href="/scheduling" class="btn btn-primary">Go to Schedule</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

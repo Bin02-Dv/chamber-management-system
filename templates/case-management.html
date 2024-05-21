@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>CCMS - Case Management</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/user-dashboard">CCMS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">My Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/settings">Settings</a>
+                </li>
+                {% if user.is_superuser == True %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage-case">My Schedule</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage-case2">My Schedule</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h2>Case Management</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Case Number</th>
+                    <th>Case Title</th>
+                    <th>Assigned Judge</th>
+                    <th>Case Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if user.is_superuser == True %}
+                {% for case in cases %}
+                    {% if case.case_number != '' %}
+                    <tr>
+                        <td>{{case.case_number}}</td>
+                        <td>{{case.case_title}}</td>
+                        <td>{{case.judged}}</td>
+                        {% if case.case_status == False %}
+                        <td class="text-danger">In Progress</td>
+                        {% else %}
+                        <td class="text-success">Completed</td>
+                        {% endif %}
+                        <td>
+                            <a href="/case-view/{{case.id}}" class="btn btn-primary btn-sm">View</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                {% else %}
+                {% if case %}
+                    {% for c in case %}
+                    <tr>
+                        <td>{{c.case_number}}</td>
+                        <td>{{c.case_title}}</td>
+                        <td>{{c.judged}}</td>
+                        {% if c.case_status == False %}
+                        <td class="text-danger">In Progress</td>
+                        {% else %}
+                        <td class="text-success">Completed</td>
+                        {% endif %}
+                        <td>
+                            <a href="/case-view/{{c.id}}" class="btn btn-primary btn-sm">View</a>
+                            <a href="/document-upload/{{c.id}}" class="btn btn-warning btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td class="text-danger">
+                            No case yet!
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endif %}
+                <!-- Add more rows for additional cases -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>CCMS - Scheduling</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/user-dashboard">CCMS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">My Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/settings">Settings</a>
+                </li>
+                {% if user.is_superuser == True %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage-case">My Schedule</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage-case2">My Schedule</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h2>Schedule an Activity</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for message in messages %}
+            {% if message.tags == 'error'%}
+            <div class="alert alert-danger">{{message}}</div>
+            {% elif message.tags == 'success'%}
+            <div class="alert alert-success">{{message}}</div>
+            {% endif %}
+            {% endfor %}
+            <div class="form-group">
+                <label for="caseTitle">Case Title</label>
+                <input type="text" class="form-control" name="caseTitle" id="caseTitle" placeholder="Enter the case" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" name="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label for="time">Time</label>
+                <input type="time" name="time" class="form-control" id="time" required>
+            </div>
+            <div class="form-group">
+                <label for="judge">Assigned Judge</label>
+                <select class="form-control" id="judge" name="judge" required>
+                    {% for judge in judges %}
+                    <option>Judge {{judge.fullname}}</option>
+                    {% endfor %}
+                    <!-- Add more judge options -->
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Schedule</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

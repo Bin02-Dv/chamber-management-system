@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>CCMS - Case Details</title>
+    <style>
+        @page {
+            size: A4;
+        }
+        body {
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h2 class="mb-4">Case Details</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Case Information</h4>
+                <ul class="list-unstyled">
+                {% if case.case_number != '' %}
+                    <li><strong>Case Number:</strong> {{case.case_number}}</li>
+                    <li><strong>Case Title:</strong> {{case.case_title}}</li>
+                    <li><strong>Assigned Judge:</strong> {{case.judged}}</li>
+                    {% if case.case_status == False %}
+                    <li class="text-danger"><strong>Case Status:</strong> In Progress</li>
+                    {% else %}
+                    <li class="text-success"><strong>Case Status:</strong> Completed</li>
+                    {% endif %}
+                {% else %}
+                    <ul class="list-unstyled">
+                        <h2 class="mb-4 text-danger">No Case Details</h2>
+                    </ul>
+                {% endif %}
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h4>Case Documents</h4>
+                {% if case.case_number != '' %}
+                <ul class="list-unstyled">
+                    {% for doc in documents %}
+                    <li><a href="{{doc.document.url}}">{{doc.doc_number}} {{doc.id}}</a></li>
+                    {% endfor %}
+                    <!-- Add more document links -->
+                </ul>
+                {% else %}
+                    <ul class="list-unstyled">
+                        <h2 class="mb-4 text-danger">No Case Details for Documents</h2>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
